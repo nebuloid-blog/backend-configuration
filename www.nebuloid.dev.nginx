@@ -1,4 +1,5 @@
+# Redirect all www-subdomains to non-www-subdomains.
 server {
-	server_name www.nebuloid.dev;
-	return 301 $scheme://nebuloid.dev$request_uri;
+	server_name www.api.nebuloid.dev;
+	return 301 $scheme://api.nebuloid.dev$request_uri;
 }
