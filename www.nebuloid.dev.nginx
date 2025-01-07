@@ -1,0 +1,4 @@
+server {
+	server_name www.nebuloid.dev;
+	return 301 $scheme://nebuloid.dev$request_uri;
+}
