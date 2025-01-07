@@ -27,18 +27,21 @@ server {
 }
 
 server {
+	# Port 80 indicates basic non-secure HTTP requests.
 	listen 80;
 	listen [::]:80;
 
+	# Set valid server names.
+	server_name api.nebuloid.dev www.api.nebuloid.dev;
+
+	# We will want to redirect HTTP to HTTPS!
 	if ($host = www.api.nebuloid.dev) {
 		return 301 https://$host$request_uri;
 	} # managed by Certbot
-
 	if ($host = api.nebuloid.dev) {
 		return 301 https://$host$request_uri;
 	} # managed by Certbot
 
-	server_name api.nebuloid.dev www.api.nebuloid.dev;
-
+	# Bad domains are given "not found", as a fallback.
 	return 404; # managed by Certbot
 }
