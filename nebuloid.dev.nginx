@@ -23,6 +23,8 @@ server {
 		add_header 'Access-Control-Allow-Origin' '*' always; # See note below...
 		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
 		add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
+		add_header 'Access-Control-Max-Age' 1728000 always;
+		add_header 'Content-Type' 'application/json; charset=UTF-8' always;
 
 		# For 'Access-Control-Allow-Origin', we are using a wildcard, '*'.
 		# This can be seen as a very permissive policy, but we must allow for the following:
@@ -32,6 +34,17 @@ server {
 		# Rather than attempting some hacks to force it working, I'm just using the wildcard.
 		# Many sites still use the wildcard here despite it not being best-practice.
 		# In a word, this policy configuration is a mess...so I'm just not messing with it!
+
+		# Handle the CORS headers of OPTIONS requests explicitly...
+		if ($request_method = OPTIONS) {
+			add_header 'Access-Control-Allow-Origin' '*' always;
+			add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+			add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
+			add_header 'Access-Control-Max-Age' 1728000 always;
+			add_header 'Content-Length' 0;
+			add_header 'Content-Type' 'text/plain charset=UTF-8';
+			return 204;
+		}
 	}
 
 	ssl_certificate /etc/letsencrypt/live/api.nebuloid.dev/fullchain.pem; # managed by Certbot
