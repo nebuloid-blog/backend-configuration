@@ -22,7 +22,7 @@ server {
 
 	# Add CORS headers to allow cross-site requests.
 	add_header 'Access-Control-Allow-Origin' '*' always; # See note below...
-	add_header 'Access-Control-Allow-Methods' 'GET, POST' always;
+	add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
 	add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
 
 	# For 'Access-Control-Allow-Origin', we are using a wildcard, '*'.
