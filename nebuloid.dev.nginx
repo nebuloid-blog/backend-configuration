@@ -18,21 +18,21 @@ server {
 		proxy_set_header Connection 'upgrade';
 		proxy_set_header Host $host;
 		proxy_cache_bypass $http_upgrade;
+
+		# Add CORS headers to allow cross-site requests.
+		add_header 'Access-Control-Allow-Origin' '*' always; # See note below...
+		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+		add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
+
+		# For 'Access-Control-Allow-Origin', we are using a wildcard, '*'.
+		# This can be seen as a very permissive policy, but we must allow for the following:
+		# - nebuloid.dev
+		# - api.nebuloid.dev
+		# - localhost:*
+		# Rather than attempting some hacks to force it working, I'm just using the wildcard.
+		# Many sites still use the wildcard here despite it not being best-practice.
+		# In a word, this policy configuration is a mess...so I'm just not messing with it!
 	}
-
-	# Add CORS headers to allow cross-site requests.
-	add_header 'Access-Control-Allow-Origin' '*' always; # See note below...
-	add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
-	add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
-
-	# For 'Access-Control-Allow-Origin', we are using a wildcard, '*'.
-	# This can be seen as a very permissive policy, but we must allow for the following:
-	# - nebuloid.dev
-	# - api.nebuloid.dev
-	# - localhost:*
-	# Rather than attempting some hacks to force it working, I'm just using the wildcard.
-	# Many sites still use the wildcard here despite it not being best-practice.
-	# In a word, this policy configuration is a mess...so I'm just not messing with it!
 
 	ssl_certificate /etc/letsencrypt/live/api.nebuloid.dev/fullchain.pem; # managed by Certbot
 	ssl_certificate_key /etc/letsencrypt/live/api.nebuloid.dev/privkey.pem; # managed by Certbot
