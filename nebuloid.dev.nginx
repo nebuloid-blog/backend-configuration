@@ -19,23 +19,9 @@ server {
 		proxy_set_header Host $host;
 		proxy_cache_bypass $http_upgrade;
 
-		# Allow specific origins dynamically
-		set $cors_origin "";
-
-		if ($http_origin ~* "^https://nebuloid\.dev$|^http://localhost:3000$") {
-			set $cors_origin $http_origin;
-		}
-
-		# Add CORS headers properly
-		add_header 'Access-Control-Allow-Origin' "$cors_origin" always;
-		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
-		add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
-		add_header 'Access-Control-Allow-Credentials' 'true' always;
-		add_header 'Access-Control-Max-Age' 1728000 always;
-
 		# Handle the CORS headers of OPTIONS requests explicitly...
 		if ($request_method = OPTIONS) {
-			add_header 'Access-Control-Allow-Origin' "$cors_origin" always;
+			add_header 'Access-Control-Allow-Origin' 'https://nebuloid.dev/' always;
 			add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
 			add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
 			add_header 'Access-Control-Allow-Credentials' 'true' always;
@@ -44,6 +30,13 @@ server {
 			add_header 'Content-Type' 'text/plain charset=UTF-8';
 			return 204;
 		}
+
+		# Add CORS headers... Handle normal methods (GET, POST)
+		add_header 'Access-Control-Allow-Origin' 'https://nebuloid.dev/' always;
+		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
+		add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
+		add_header 'Access-Control-Allow-Credentials' 'true' always;
+		add_header 'Access-Control-Max-Age' 1728000 always;
 	}
 
 	ssl_certificate /etc/letsencrypt/live/api.nebuloid.dev/fullchain.pem; # managed by Certbot
