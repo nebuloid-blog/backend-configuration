@@ -19,24 +19,19 @@ server {
 		proxy_set_header Host $host;
 		proxy_cache_bypass $http_upgrade;
 
-		# Handle the CORS headers of OPTIONS requests explicitly...
-		if ($request_method = OPTIONS) {
-			add_header 'Access-Control-Allow-Origin' 'https://nebuloid.dev/' always;
-			add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
-			add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
-			add_header 'Access-Control-Allow-Credentials' 'true' always;
-			add_header 'Access-Control-Max-Age' 1728000 always;
-			add_header 'Content-Length' 0;
-			add_header 'Content-Type' 'text/plain charset=UTF-8';
-			return 204;
-		}
-
 		# Add CORS headers... Handle normal methods (GET, POST)
-		add_header 'Access-Control-Allow-Origin' 'https://nebuloid.dev/' always;
+		add_header 'Access-Control-Allow-Origin' 'https://nebuloid.dev' always;
 		add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS' always;
 		add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Accept, Authorization' always;
 		add_header 'Access-Control-Allow-Credentials' 'true' always;
 		add_header 'Access-Control-Max-Age' 1728000 always;
+
+		# Handle the CORS headers of OPTIONS requests explicitly...
+		if ($request_method = OPTIONS) {
+			add_header 'Content-Length' 0;
+			add_header 'Content-Type' 'text/plain charset=UTF-8';
+			return 204;
+		}
 	}
 
 	ssl_certificate /etc/letsencrypt/live/api.nebuloid.dev/fullchain.pem; # managed by Certbot
